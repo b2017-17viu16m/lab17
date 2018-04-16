@@ -1,14 +1,15 @@
-## Laboratory work XI
+## Laboratory work XII
 
-Данная лабораторная работа посвещена изучению инструментов отладки на примере **lldb**
+
+Данная лабораторная работа посвещена изучению специализированного текстового редактора **Vim**
 
 ```ShellSession
-$ open https://lldb.llvm.org/tutorial.html
+$ open https://ru.wikipedia.org/wiki/Vim
 ```
 
 ## Tasks
 
-- [x] 1. Создать публичный репозиторий с названием **lab11** на сервисе **GitHub**
+- [x] 1. Создать публичный репозиторий с названием **lab12** на сервисе **GitHub**
 - [x] 2. Выполнить инструкцию учебного материала
 - [x] 3. Ознакомиться со ссылками учебного материала
 - [x] 4. Составить отчет и отправить ссылку личным сообщением в **Slack**
@@ -17,80 +18,87 @@ $ open https://lldb.llvm.org/tutorial.html
 
 ```ShellSession
 $ export GITHUB_USERNAME=b2017-17viu16m
-$ alias gsed=sed # for *-nix system
+$ export HUNTER_ROOT=`pwd`/b2017-17viu16m/workspace/projects/hunter
 ```
 
 ```ShellSession
-$ git clone https://github.com/${GITHUB_USERNAME}/lab10 lab11
-$ cd lab11
+$ vimtutor ru
+```
+
+```ShellSession
+$ git clone https://github.com/${GITHUB_USERNAME}/lab11 lab12
+$ cd lab12
 $ git remote remove origin
-$ git remote add origin https://github.com/${GITHUB_USERNAME}/lab11
+$ git remote add origin https://github.com/${GITHUB_USERNAME}/lab12
 ```
 
 ```ShellSession
-$ cmake -H. -B_build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=_install
-$ cmake --build _build --target install
-$ cd _install/bin
+$ vim README.md
+:s/lab11/lab12/g
+/file<CR>wChaving the path environment variable value **LOG_PATH**<ESC>
+:wq
 ```
 
 ```ShellSession
-$ lldb demo
-(lldb) process launch --stop-at-entry
-(lldb) breakpoint list
-(lldb) breakpoint set --name print
-(lldb) breakpoint set --file demo.cpp --line 6
-(lldb) breakpoint list
-(lldb) process launch
-(lldb) exit
+$ vim sources/demo.cpp
+Yp3wct>cstdlib<ESC>
+/while<CR>ostd::string log_path = std::getenv("LOG_PATH");<ESC>
+/"log<CR>
+cf"log_path<ESC>
+k2dd2kpVj<
+:wq
 ```
 
 ```ShellSession
-$ demo
-<Command>-T
-$ ps
-$ lldb
-(lldb) process attach --pid <идентификатор_процесса> 
-(lldb) process attach --name demo
-(lldb) exit
+$ pushd $HUNTER_ROOT
+$ git config --global hub.protocol https
+$ git fork
+$ git branch -u ${GITHUB_USERNAME}/master master
+...
+$ git release create -m"${HUNTER_VERSION}.1" ${HUNTER_VERSION}.1
+$ git release show ${HUNTER_VERSION}.1
 ```
 
 ```ShellSession
-$ lldb demo
-(lldb) process launch --stop-at-entry -- -program_arg "text1 text2 text3"
-(lldb) thread list
-(lldb) thread backtrace
-(lldb) frame variable
-(lldb) frame variable argv[0] 
+$ wget https://github.com/${GITHUB_USERNAME}/hunter/archive/${HUNTER_VERSION}.1.tar.gz
+$ export MYHUNTER_SHA1=`openssl sha1 ${HUNTER_VERSION}.1.tar.gz | cut -d'=' -f2 | cut -c2-41`
+$ echo $MYHUNTER_SHA1
+$ rm -rf ${HUNTER_VERSION}.1.tar.gz
 ```
 
 ```ShellSession
-$ lldb demo
-(lldb) process launch --stop-at-entry
-(lldb) thread continue
-(lldb) thread step-in
-(lldb) thread step-over
-(lldb) thread step-out
-(lldb) thread step-inst
-(lldb) thread step-over-inst
-(lldb) exit
+$ popd
+$ echo $MYHUNTER_SHA1 | pbcopy
+$ vim CMakeLists.txt
+/SHA1<CR>
+wc2w<C-V><ESC>
+:wq
 ```
 
 ```ShellSession
-$ cd ../..
-$ gsed -i 's/lab10/lab11/g' README.md
+$ vim README.md
+/lab11<CR>
+e<C-A>
+ne<C-A>
+:wq
 ```
 
 ```ShellSession
 $ git add .
-$ git commit -m"debugging"
+$ git commit -m"refactoring"
 $ git push origin master
+```
+
+```ShellSession
+$ travis login --auto
+$ travis enable
 ```
 
 ## Report
 
 ```ShellSession
 $ cd ~/workspace/labs/
-$ export LAB_NUMBER=11
+$ export LAB_NUMBER=12
 $ git clone https://github.com/tp-labs/lab${LAB_NUMBER} tasks/lab${LAB_NUMBER}
 $ mkdir reports/lab${LAB_NUMBER}
 $ cp tasks/lab${LAB_NUMBER}/README.md reports/lab${LAB_NUMBER}/REPORT.md
@@ -101,13 +109,13 @@ $ gistup -m "lab${LAB_NUMBER}"
 
 ## Result
 
-В ходе проделанной работы проведено ознакомление с работой инструмента отладки Lldb, осуществлен запуск сервиса отладки для процесса demo, созданы точки отладки.
+В ходе проделанной работы проведено ознакомление с работой текстового редактора Vim, осуществлено редактирование отдельных файлов с использованием Vim.
 
 ## Links
 
-- [gdb](https://www.gnu.org/software/gdb/)
-- [lldb](https://lldb.llvm.org)
-- [windbg](https://msdn.microsoft.com/en-us/library/windows/hardware/dn745911(v=vs.85).aspx)
+- [ex](https://en.wikipedia.org/wiki/Ex_(text_editor))
+- [vi](https://en.wikipedia.org/wiki/Vi)
+- [hub](https://github.com/github/hub)
 
 ```
 Copyright (c) 2017 Братья Вершинины
