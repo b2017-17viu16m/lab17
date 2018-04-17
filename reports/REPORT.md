@@ -1,91 +1,135 @@
-## Laboratory work XII
+## Laboratory work XIII
 
-
-Данная лабораторная работа посвещена изучению специализированного текстового редактора **Vim**
+Данная лабораторная работа посвещена изучению систем автоматизации развёртывания и управления приложениями на примере **Docker**
 
 ```ShellSession
-$ open https://ru.wikipedia.org/wiki/Vim
+$ open https://docs.docker.com/get-started/
 ```
 
 ## Tasks
 
-- [x] 1. Создать публичный репозиторий с названием **lab12** на сервисе **GitHub**
-- [x] 2. Выполнить инструкцию учебного материала
-- [x] 3. Ознакомиться со ссылками учебного материала
+- [x] 1. Создать публичный репозиторий с названием **lab13** на сервисе **GitHub**
+- [x] 2. Ознакомиться со ссылками учебного материала
+- [x] 3. Выполнить инструкцию учебного материала
 - [x] 4. Составить отчет и отправить ссылку личным сообщением в **Slack**
 
 ## Tutorial
 
 ```ShellSession
 $ export GITHUB_USERNAME=b2017-17viu16m
-$ export HUNTER_ROOT=`pwd`/b2017-17viu16m/workspace/projects/hunter
 ```
 
 ```ShellSession
-$ vimtutor ru
-```
-
-```ShellSession
-$ git clone https://github.com/${GITHUB_USERNAME}/lab11 lab12
-$ cd lab12
+$ git clone https://github.com/${GITHUB_USERNAME}/lab12 lab13
+$ cd lab13
 $ git remote remove origin
-$ git remote add origin https://github.com/${GITHUB_USERNAME}/lab12
+$ git remote add origin https://github.com/${GITHUB_USERNAME}/lab13
+```
+
+```ShellSession
+$ cat > Dockerfile <<EOF
+FROM ubuntu:16.04
+EOF
+```
+
+```ShellSession
+$ cat >> Dockerfile <<EOF
+
+RUN apt update
+RUN apt install -yy gcc g++ cmake 
+EOF
+```
+
+```ShellSession
+$ cat >> Dockerfile <<EOF
+
+COPY . print/
+WORKDIR print
+EOF
+```
+
+```ShellSession
+$ cat >> Dockerfile <<EOF
+
+RUN cmake -H. -B_build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=_install
+RUN cmake --build _build
+RUN cmake --build _build --target install
+EOF
+```
+
+```ShellSession
+$ cat >> Dockerfile <<EOF
+
+ENV LOG_PATH /home/logs/log.txt
+EOF
+```
+
+```ShellSession
+$ cat >> Dockerfile <<EOF
+
+VOLUME /home/logs
+EOF
+```
+
+```ShellSession
+$ cat >> Dockerfile <<EOF
+
+WORKDIR _install/bin
+EOF
+```
+
+```ShellSession
+$ cat >> Dockerfile <<EOF
+
+CMD ./demo
+EOF
+```
+
+```ShellSession
+$ docker build -t logger .
+```
+
+```ShellSession
+$ docker images
+```
+
+```ShellSession
+$ mkdir logs
+$ docker run -it -v "$(pwd)/logs/:/home/logs/" logger
+text1
+text2
+text3
+<C-D>
+```
+
+```ShellSession
+$ docker inspect logger
+```
+
+```ShellSession
+$ cat logs/log.txt
 ```
 
 ```ShellSession
 $ vim README.md
-:s/lab11/lab12/g
-/file<CR>wChaving the path environment variable value **LOG_PATH**<ESC>
+:s/lab12/lab13/g<CR>
 :wq
 ```
 
 ```ShellSession
-$ vim sources/demo.cpp
-Yp3wct>cstdlib<ESC>
-/while<CR>ostd::string log_path = std::getenv("LOG_PATH");<ESC>
-/"log<CR>
-cf"log_path<ESC>
-k2dd2kpVj<
-:wq
+$ vim .travis.yml
+/lang<CR>o
+services:
+  - docker<ESC>
+jVGddo
+script:
+  - docker build -t logger .<ESC>
 ```
 
 ```ShellSession
-$ pushd $HUNTER_ROOT
-$ git config --global hub.protocol https
-$ git fork
-$ git branch -u ${GITHUB_USERNAME}/master master
-...
-$ git release create -m"${HUNTER_VERSION}.1" ${HUNTER_VERSION}.1
-$ git release show ${HUNTER_VERSION}.1
-```
-
-```ShellSession
-$ wget https://github.com/${GITHUB_USERNAME}/hunter/archive/${HUNTER_VERSION}.1.tar.gz
-$ export MYHUNTER_SHA1=`openssl sha1 ${HUNTER_VERSION}.1.tar.gz | cut -d'=' -f2 | cut -c2-41`
-$ echo $MYHUNTER_SHA1
-$ rm -rf ${HUNTER_VERSION}.1.tar.gz
-```
-
-```ShellSession
-$ popd
-$ echo $MYHUNTER_SHA1 | pbcopy
-$ vim CMakeLists.txt
-/SHA1<CR>
-wc2w<C-V><ESC>
-:wq
-```
-
-```ShellSession
-$ vim README.md
-/lab11<CR>
-e<C-A>
-ne<C-A>
-:wq
-```
-
-```ShellSession
-$ git add .
-$ git commit -m"refactoring"
+$ git add Dockerfile
+$ git add .travis.yml
+$ git commit -m"adding Dockerfile"
 $ git push origin master
 ```
 
@@ -98,7 +142,7 @@ $ travis enable
 
 ```ShellSession
 $ cd ~/workspace/labs/
-$ export LAB_NUMBER=12
+$ export LAB_NUMBER=13
 $ git clone https://github.com/tp-labs/lab${LAB_NUMBER} tasks/lab${LAB_NUMBER}
 $ mkdir reports/lab${LAB_NUMBER}
 $ cp tasks/lab${LAB_NUMBER}/README.md reports/lab${LAB_NUMBER}/REPORT.md
@@ -107,15 +151,14 @@ $ edit REPORT.md
 $ gistup -m "lab${LAB_NUMBER}"
 ```
 
-## Result
+##Result
+В ходе проделанной работы проведено ознакомление с работой ситсемы автоматизации развертывания и управления приложениями Docker, создан контейнер, на котором автоматизированно развенуто приложение, получен вывод приложения, который записан в файл log.txt.
 
-В ходе проделанной работы проведено ознакомление с работой текстового редактора Vim, осуществлено редактирование отдельных файлов с использованием Vim.
 
 ## Links
 
-- [ex](https://en.wikipedia.org/wiki/Ex_(text_editor))
-- [vi](https://en.wikipedia.org/wiki/Vi)
-- [hub](https://github.com/github/hub)
+- [Instructions](https://docs.docker.com/engine/reference/builder/)
+- [Book](https://www.dockerbook.com)
 
 ```
 Copyright (c) 2017 Братья Вершинины
