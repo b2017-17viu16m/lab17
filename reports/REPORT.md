@@ -1,17 +1,18 @@
-## Laboratory work XIII
+## Laboratory work XIV
 
-Данная лабораторная работа посвещена изучению систем автоматизации развёртывания и управления приложениями на примере **Docker**
+Данная лабораторная работа посвещена изучению инструментов подписывания и верификации исполняемых файлов на примере **codesign**
 
 ```ShellSession
-$ open https://docs.docker.com/get-started/
+$ open http://bd808.com/blog/2013/10/21/creating-a-self-signed-code-certificate-for-xcode/
 ```
 
 ## Tasks
 
-- [x] 1. Создать публичный репозиторий с названием **lab13** на сервисе **GitHub**
+- [x] 1. Создать публичный репозиторий с названием **lab14** на сервисе **GitHub**
 - [x] 2. Ознакомиться со ссылками учебного материала
-- [x] 3. Выполнить инструкцию учебного материала
-- [x] 4. Составить отчет и отправить ссылку личным сообщением в **Slack**
+- [ ] 3. Сгенерировать самоподписанный сертификат
+- [x] 4. Выполнить инструкцию учебного материала
+- [x] 5. Составить отчет и отправить ссылку личным сообщением в **Slack**
 
 ## Tutorial
 
@@ -20,116 +21,38 @@ $ export GITHUB_USERNAME=b2017-17viu16m
 ```
 
 ```ShellSession
-$ git clone https://github.com/${GITHUB_USERNAME}/lab12 lab13
-$ cd lab13
+$ git clone https://github.com/${GITHUB_USERNAME}/lab13 lab14
+$ cd lab14
 $ git remote remove origin
-$ git remote add origin https://github.com/${GITHUB_USERNAME}/lab13
+$ git remote add origin https://github.com/${GITHUB_USERNAME}/lab14
 ```
 
 ```ShellSession
-$ cat > Dockerfile <<EOF
-FROM ubuntu:16.04
+$ cmake -H. -B_build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=_install
+$ cmake --build _build
+$ cmake --build _build --target install
+```
+
+```ShellSession
+$ codesign -s "Your Company, Inc." ./_install/bin/demo
+$ codesign -v ./_install/bin/demo
+```
+
+```ShellSession
+$ travis setup releases
+$ cat .travis.yml
+```
+
+```ShellSession
+$ cat >> .travis.yml <<EOF
+before_deploy:
+- codesign -s "Your Company, Inc." ./_install/bin/demo
 EOF
 ```
 
 ```ShellSession
-$ cat >> Dockerfile <<EOF
-
-RUN apt update
-RUN apt install -yy gcc g++ cmake 
-EOF
-```
-
-```ShellSession
-$ cat >> Dockerfile <<EOF
-
-COPY . print/
-WORKDIR print
-EOF
-```
-
-```ShellSession
-$ cat >> Dockerfile <<EOF
-
-RUN cmake -H. -B_build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=_install
-RUN cmake --build _build
-RUN cmake --build _build --target install
-EOF
-```
-
-```ShellSession
-$ cat >> Dockerfile <<EOF
-
-ENV LOG_PATH /home/logs/log.txt
-EOF
-```
-
-```ShellSession
-$ cat >> Dockerfile <<EOF
-
-VOLUME /home/logs
-EOF
-```
-
-```ShellSession
-$ cat >> Dockerfile <<EOF
-
-WORKDIR _install/bin
-EOF
-```
-
-```ShellSession
-$ cat >> Dockerfile <<EOF
-
-CMD ./demo
-EOF
-```
-
-```ShellSession
-$ docker build -t logger .
-```
-
-```ShellSession
-$ docker images
-```
-
-```ShellSession
-$ mkdir logs
-$ docker run -it -v "$(pwd)/logs/:/home/logs/" logger
-text1
-text2
-text3
-<C-D>
-```
-
-```ShellSession
-$ docker inspect logger
-```
-
-```ShellSession
-$ cat logs/log.txt
-```
-
-```ShellSession
-$ vim README.md
-:s/lab12/lab13/g<CR>
-:wq
-```
-
-```ShellSession
-$ vim .travis.yml
-/lang<CR>o
-services:
-  - docker<ESC>
-jVGddo
-script:
-  - docker build -t logger .<ESC>
-```
-
-```ShellSession
-$ git add Dockerfile
-$ git add .travis.yml
-$ git commit -m"adding Dockerfile"
+$ git add .
+$ git commit -m"added code signing"
 $ git push origin master
 ```
 
@@ -138,11 +61,16 @@ $ travis login --auto
 $ travis enable
 ```
 
+```ShellSession
+$ git tag v0.1.0
+$ git push origin master
+```
+
 ## Report
 
 ```ShellSession
 $ cd ~/workspace/labs/
-$ export LAB_NUMBER=13
+$ export LAB_NUMBER=14
 $ git clone https://github.com/tp-labs/lab${LAB_NUMBER} tasks/lab${LAB_NUMBER}
 $ mkdir reports/lab${LAB_NUMBER}
 $ cp tasks/lab${LAB_NUMBER}/README.md reports/lab${LAB_NUMBER}/REPORT.md
@@ -151,15 +79,17 @@ $ edit REPORT.md
 $ gistup -m "lab${LAB_NUMBER}"
 ```
 
+
 ## Result
 
-В ходе проделанной работы проведено ознакомление с работой ситсемы автоматизации развертывания и управления приложениями Docker, создан контейнер, на котором автоматизированно развенуто приложение, получен вывод приложения, который записан в файл log.txt.
+В ходе проделанной работы проведено ознакомление с инструментом Codesign подписывания и верификации исполняемых файлов.
 
 
 ## Links
 
-- [Instructions](https://docs.docker.com/engine/reference/builder/)
-- [Book](https://www.dockerbook.com)
+- [Code Sign macOS](https://www.digicert.com/code-signing/mac-os-codesign-tool.htm)
+- [Code Sign Windows](https://msdn.microsoft.com/ru-ru/library/windows/desktop/aa380259(v=vs.85).aspx)
+- [Code Sign Unix](https://github.com/bartman/elfgpg)
 
 ```
 Copyright (c) 2017 Братья Вершинины
