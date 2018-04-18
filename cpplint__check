@@ -1,0 +1,9 @@
+sergey@sergey-VirtualBox:~/b2017-17viu16m/workspace/projects/lab15$ cpplint sources/demo.cpp
+sources/demo.cpp:0:  No copyright message found.  You should have a line: "Copyright [year] <Copyright Owner>"  [legal/copyright] [5]
+sources/demo.cpp:2:  Found C++ system header after other header. Should be: demo.h, c system, c++ system, other.  [build/include_order] [4]
+sources/demo.cpp:6:  Static/global string variables are not permitted.  [runtime/string] [4]
+sources/demo.cpp:7:  Tab found; better to use spaces  [whitespace/tab] [1]
+sources/demo.cpp:8:  Missing space before ( in while(  [whitespace/parens] [5]
+Done processing sources/demo.cpp
+Total errors found: 5
+

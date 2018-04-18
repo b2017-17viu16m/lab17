@@ -1,8 +1,0 @@
-language: cpp
-
-services:
-  - docker
-script:
-  - docker build -t logger .
-before_deploy:
-- codesign -s "Your Company, Inc." ./_install/bin/demo
