@@ -1,36 +1,81 @@
-## Laboratory work XV
+## Laboratory work XVI
 
-Данная лабораторная работа посвещена изучению инструментов статического и динамического анализа кода
+Данная лабораторная работа посвещена изучению систем организации совместных сеансов разработки на примере **tmux**
+
 ```ShellSession
-$ open http://cppcheck.sourceforge.net
+$ open https://wiki.archlinux.org/index.php/Tmux_(Русский)
 ```
 
 ## Tasks
 
 - [x] 1. Ознакомиться со ссылками учебного материала
-- [x] 2. Используя **cpplint** провести анализ проекта на **C++**
-- [x] 3. Используя **Cppcheck** провести анализ проекта на **C++**
-- [x] 4. Используя **OCLint** провести анализ проекта на **C++**
-- [x] 5. Используя **Valgrind** провести анализ проекта на **C++**
-- [x] 6. Составить отчет и отправить ссылку личным сообщением в **Slack**
+- [x] 2. Выполнить инструкцию учебного материала
+- [x] 3. Составить отчет и отправить ссылку личным сообщением в **Slack**
 
+## Tutorial
+
+```ShellSession
+$ tmux
+$ tmux new -s sergey
+```
+
+```ShellSession
+$ tmux a
+$ tmux a -t sergey
+```
+
+```ShellSession
+$ tmux ls
+$ tmux kill-session -t sergey
+```
+
+```ShellSession
+<C-B>s
+<C-B>$
+```
+
+```ShellSession
+<C-B>c
+<C-B>w
+<C-B>n
+<C-B>p
+<C-B>f
+<C-B>,
+<C-B>&
+```
+
+```ShellSession
+<C-B>%
+<C-B>"
+<C-B>o
+<C-B>q
+<C-B>x
+<C-B>+
+<C-B>-
+<C-B>⍽
+```
+
+## Report
+
+```ShellSession
+$ cd ~/workspace/labs/
+$ export LAB_NUMBER=16
+$ git clone https://github.com/tp-labs/lab${LAB_NUMBER} tasks/lab${LAB_NUMBER}
+$ mkdir reports/lab${LAB_NUMBER}
+$ cp tasks/lab${LAB_NUMBER}/README.md reports/lab${LAB_NUMBER}/REPORT.md
+$ cd reports/lab${LAB_NUMBER}
+$ edit REPORT.md
+$ gistup -m "lab${LAB_NUMBER}"
+```
 
 ## Result
 
-- [cpplint](https://github.com/b2017-17viu16m/lab15/blob/master/cpplint__check)
-- [Cppcheck](https://github.com/b2017-17viu16m/lab15/blob/master/cppcheck__check)
-- [OCLint](https://github.com/b2017-17viu16m/lab15/blob/master/oclint_check)
-- [Valgrind](https://github.com/b2017-17viu16m/lab15/blob/master/valgrind_check)
-
-В ходе проделанной работы проведено ознакомление с инструментами анализа кода проекта Cpplint, Cppcheck, OCLint, Valgrind на примере demo.cpp.
+В ходе проделанной работы проведено ознакомление с менеджером терминалов Tmux, создана и окончена терминальная сессия, изучены управляющие сочетания клавиш.
 
 
 ## Links
 
-- [Google C++ Style Guide](https://github.com/cpplint/cpplint)
-- [Cppcheck Manual](http://cppcheck.sourceforge.net/manual.pdf)
-- [Valgrind Quick Start Guide](http://valgrind.org/docs/manual/index.html)
-- [OCLint Tutorial](http://docs.oclint.org/en/stable/intro/tutorial.html)
+- [Tmux](https://tmux.github.io)
 
 ```
 Copyright (c) 2017 Братья Вершинины
